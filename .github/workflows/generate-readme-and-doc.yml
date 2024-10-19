@@ -30,7 +30,7 @@ jobs:
           echo "const fs = require('fs');" > generateReadme.js
           echo "const packageJson = require('./package.json');" >> generateReadme.js
           echo "const { name, displayName, version, description, author } = packageJson;" >> generateReadme.js
-          echo "const readmeContent = `## ${displayName}\n\n# ${name} : ${version}\n\n${description}\n\n## Author\n\n**Name:** ${author.name}\n**Email:** [${author.email}](mailto:${author.email})\n**Website:** [${author.url}](${author.url})\n`;" >> generateReadme.js
+          echo "const readmeContent = "## "+displayName+"\n\n# "+name+" : "+version+"\n\n"+description+"\n\n## Author\n\n**Name:** "+author.name+"\n**Email:** ["+author.email+"](mailto:${"+author.email+"})\n**Website:** [${"+author.url+"}](${"+author.url+"})\n;" >> generateReadme.js
           echo "fs.writeFileSync('README.md', readmeContent);" >> generateReadme.js
           node generateReadme.js
 
