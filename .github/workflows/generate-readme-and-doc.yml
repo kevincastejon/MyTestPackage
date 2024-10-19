@@ -34,7 +34,13 @@ jobs:
           echo "for (const [key, value] of Object.entries(dependencies)) {" >> generateReadme.js
           echo "  dependenciesContent += \`- \${key} : \${value}\n\`;" >> generateReadme.js
           echo "}" >> generateReadme.js
-          echo "const readmeContent = \`# \${name}\n\n## \${displayName} : \${version}\n\n\${description}\n\n\${dependenciesContent}\n\n**API Documentation** :  https://kevincastejon.github.io/MyTestPackage \n\n**Author**:\n\n\- \${author.name}\n\n\- \${author.email}\n\n\- \${author.url}\`;" >> generateReadme.js
+
+          # Récupérer le nom du propriétaire et le nom du dépôt pour l'URL
+          echo "const owner = process.env.GITHUB_REPOSITORY.split('/')[0];" >> generateReadme.js
+          echo "const repo = process.env.GITHUB_REPOSITORY.split('/')[1];" >> generateReadme.js
+          echo "const apiDocumentationUrl = \`https://\${owner}.github.io/\${repo}\`;" >> generateReadme.js
+
+          echo "const readmeContent = \`# \${name}\n\n## \${displayName} : \${version}\n\n\${description}\n\n\${dependenciesContent}\n\n**API Documentation** : \${apiDocumentationUrl}\n\n**Author**:\n\n\- \${author.name}\n\n\- \${author.email}\n\n\- \${author.url}\`;" >> generateReadme.js
           echo "fs.writeFileSync('README.MD', readmeContent);" >> generateReadme.js
           node generateReadme.js
 
