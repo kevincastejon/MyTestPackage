@@ -1,8 +1,12 @@
-# my-test-package
+## My Test Package
+
+# my-test-package : 0.0.1
 
 A package for automatic doc generation testing purpose.
 
-## Version
+## Author
 
-Current version: 0.0.1
+**
+*[](mailto:)*
+*[]()*
 
