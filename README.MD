@@ -4,6 +4,8 @@
 
 A package for automatic doc generation testing purpose.
 
+**API Documentation** : https://kevincastejon.github.io/MyTestPackage
+
 **Dependencies**:
 - com.unity.nuget.newtonsoft-json : 3.0.1
 - com.unity.multiplayer.tools : 1.1.0
@@ -16,8 +18,6 @@ A package for automatic doc generation testing purpose.
 - com.unity.animation.rigging : 1.2.1
 - com.smallstudio.localizedaudio : 1.0.1
 
-
-**API Documentation** : https://kevincastejon.github.io/MyTestPackage
 
 **Author**:
 
