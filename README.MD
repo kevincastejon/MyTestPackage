@@ -6,7 +6,7 @@ A package for automatic doc generation testing purpose.
 
 ## Author
 
-**
-*[](mailto:)*
-*[]()*
+**Name:** 
+**Email:** [](mailto:)
+**Website:** []()
 
