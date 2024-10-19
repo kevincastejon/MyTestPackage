@@ -17,8 +17,10 @@ A package for automatic doc generation testing purpose.
 - com.smallstudio.localizedaudio : 1.0.1
 
 
-Kevin Castejon
+**Author**:
 
-castejonkevin@gmail.com
+- Kevin Castejon
 
-http://www.kevincastejon.fr/
+- castejonkevin@gmail.com
+
+- http://www.kevincastejon.fr/
