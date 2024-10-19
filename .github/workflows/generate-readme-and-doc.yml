@@ -18,50 +18,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Générer le README.MD en utilisant les informations du package.json
-      - name: Generate README.MD
+      # Installer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'  # Choisissez la version de Node.js souhaitée
+
+      # Créer le script pour générer le README.MD
+      - name: Generate README.md
         run: |
-          # Extraire les informations nécessaires du package.json
-          NAME=$(grep '"name"' package.json | head -1 | cut -d '"' -f 4)
-          DISPLAYNAME=$(grep '"displayName"' package.json | head -1 | cut -d '"' -f 4)
-          VERSION=$(grep '"version"' package.json | head -1 | cut -d '"' -f 4)
-          DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
-
-          # Débogage : afficher les informations extraites
-          echo "Name: $NAME"
-          echo "Display Name: $DISPLAYNAME"
-          echo "Version: $VERSION"
-          echo "Description: $DESCRIPTION"
-
-          # Extraire les informations de l'auteur
-          AUTHOR_NAME=$(grep -A 2 '"author"' package.json | grep '"name"' | head -n 1 | cut -d '"' -f 4)
-          AUTHOR_EMAIL=$(grep -A 2 '"author"' package.json | grep '"email"' | head -n 1 | cut -d '"' -f 4)
-          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | head -n 1 | cut -d '"' -f 4)
-
-          # Débogage : afficher les informations de l'auteur extraites
-          echo "Author Name: $AUTHOR_NAME"
-          echo "Author Email: $AUTHOR_EMAIL"
-          echo "Author URL: $AUTHOR_URL"
-
-          # Vérifier si les informations de l'auteur sont vides
-          if [ -z "$AUTHOR_NAME" ] || [ -z "$AUTHOR_EMAIL" ] || [ -z "$AUTHOR_URL" ]; then
-            echo "Author information is missing or incorrectly formatted in package.json"
-            exit 1
-          fi
-
-          # Créer le contenu du README.MD
-          echo "## $DISPLAYNAME" > README.MD
-          echo "" >> README.MD
-          echo "# $NAME : $VERSION" >> README.MD
-          echo "" >> README.MD
-          echo "$DESCRIPTION" >> README.MD
-          echo "" >> README.MD
-          echo "## Author" >> README.MD
-          echo "" >> README.MD
-          echo "**Name:** $AUTHOR_NAME" >> README.MD
-          echo "**Email:** [$AUTHOR_EMAIL](mailto:$AUTHOR_EMAIL)" >> README.MD
-          echo "**Website:** [$AUTHOR_URL]($AUTHOR_URL)" >> README.MD
-          echo "" >> README.MD
+          echo "const fs = require('fs');" > generateReadme.js
+          echo "const packageJson = require('./package.json');" >> generateReadme.js
+          echo "const { name, displayName, version, description, author } = packageJson;" >> generateReadme.js
+          echo "const readmeContent = `## ${displayName}\n\n# ${name} : ${version}\n\n${description}\n\n## Author\n\n**Name:** ${author.name}\n**Email:** [${author.email}](mailto:${author.email})\n**Website:** [${author.url}](${author.url})\n`;" >> generateReadme.js
+          echo "fs.writeFileSync('README.md', readmeContent);" >> generateReadme.js
+          node generateReadme.js
 
       # Vérifier si le fichier README.MD a changé
       - name: Check for README changes
@@ -69,8 +40,8 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add README.MD
-            git commit -m "Update README.MD"
+            git add README.md
+            git commit -m "Update README.md"
             git push
           else
             echo "No changes to commit"
