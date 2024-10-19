@@ -18,20 +18,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Installer jq pour le traitement JSON
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
       # Générer le README.MD en utilisant les informations du package.json
       - name: Generate README.md
         run: |
-          NAME=$(jq -r '.name' package.json)
-          DISPLAYNAME=$(jq -r '.displayName' package.json)
-          VERSION=$(jq -r '.version' package.json)
-          DESCRIPTION=$(jq -r '.description' package.json)
-          AUTHOR_NAME=$(jq -r '.author.name' package.json)
-          AUTHOR_EMAIL=$(jq -r '.author.email' package.json)
-          AUTHOR_URL=$(jq -r '.author.url' package.json)
+          # Extraire les informations nécessaires du package.json
+          NAME=$(grep '"name"' package.json | head -1 | cut -d '"' -f 4)
+          DISPLAYNAME=$(grep '"displayName"' package.json | head -1 | cut -d '"' -f 4)
+          VERSION=$(grep '"version"' package.json | head -1 | cut -d '"' -f 4)
+          DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
+          AUTHOR_NAME=$(grep '"name"' package.json | grep '"author"' -A 2 | tail -1 | cut -d '"' -f 4)
+          AUTHOR_EMAIL=$(grep '"email"' package.json | grep '"author"' -A 2 | tail -1 | cut -d '"' -f 4)
+          AUTHOR_URL=$(grep '"url"' package.json | grep '"author"' -A 2 | tail -1 | cut -d '"' -f 4)
 
           # Créer le contenu du README.MD
           {
