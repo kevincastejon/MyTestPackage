@@ -37,8 +37,8 @@ jobs:
           AUTHOR_NAME=$(grep -A 2 '"author"' package.json | grep '"name"' | cut -d '"' -f 4)
           AUTHOR_EMAIL=$(grep -A 2 '"author"' package.json | grep '"email"' | cut -d '"' -f 4)
 
-          # Extraire l'URL de l'auteur sans utilitaires externes
-          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | sed 's/.*"url": "\(.*\)".*/\1/')
+          # Extraire l'URL de l'auteur
+          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | sed 's/.*"url": "\(.*\)".*/\1/' | tr -d '[:space:]')
 
           # Débogage : afficher les informations de l'auteur extraites
           echo "Author Name: $AUTHOR_NAME"
