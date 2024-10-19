@@ -28,9 +28,15 @@ jobs:
           DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
 
           # Extraire les informations de l'auteur
-          AUTHOR_NAME=$(grep '"name"' package.json | grep 'author' | head -1 | cut -d '"' -f 4)
-          AUTHOR_EMAIL=$(grep '"email"' package.json | grep 'author' | head -1 | cut -d '"' -f 4)
-          AUTHOR_URL=$(grep '"url"' package.json | grep 'author' | head -1 | cut -d '"' -f 4)
+          AUTHOR_NAME=$(grep '"name"' package.json | grep 'author' | cut -d '"' -f 4)
+          AUTHOR_EMAIL=$(grep '"email"' package.json | grep 'author' | cut -d '"' -f 4)
+          AUTHOR_URL=$(grep '"url"' package.json | grep 'author' | cut -d '"' -f 4)
+
+          # Vérifier si les informations de l'auteur sont vides
+          if [ -z "$AUTHOR_NAME" ] || [ -z "$AUTHOR_EMAIL" ] || [ -z "$AUTHOR_URL" ]; then
+            echo "Author information is missing or incorrectly formatted in package.json"
+            exit 1
+          fi
 
           # Créer le contenu du README.MD
           echo "## $DISPLAYNAME" > README.MD
