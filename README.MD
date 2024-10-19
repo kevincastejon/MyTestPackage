@@ -17,7 +17,7 @@ A package for automatic doc generation testing purpose.
 - com.smallstudio.localizedaudio : 1.0.1
 
 
-**API Documentation : **https://kevincastejon.github.io/MyTestPackage
+**API Documentation : ** https://kevincastejon.github.io/MyTestPackage 
 
 **Author**:
 
