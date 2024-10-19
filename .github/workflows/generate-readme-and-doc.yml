@@ -40,7 +40,7 @@ jobs:
           echo "const repo = process.env.GITHUB_REPOSITORY.split('/')[1];" >> generateReadme.js
           echo "const apiDocumentationUrl = \`https://\${owner}.github.io/\${repo}\`;" >> generateReadme.js
 
-          echo "const readmeContent = \`# \${name}\n\n## \${displayName} : \${version}\n\n\${description}\n\n\${dependenciesContent}\n\n**API Documentation** : \${apiDocumentationUrl}\n\n**Author**:\n\n\- \${author.name}\n\n\- \${author.email}\n\n\- \${author.url}\`;" >> generateReadme.js
+          echo "const readmeContent = \`# \${name}\n\n## \${displayName} : \${version}\n\n\${description}\n\n**API Documentation** : \${apiDocumentationUrl}\n\n\${dependenciesContent}\n\n**Author**:\n\n\- \${author.name}\n\n\- \${author.email}\n\n\- \${author.url}\`;" >> generateReadme.js
           echo "fs.writeFileSync('README.MD', readmeContent);" >> generateReadme.js
           node generateReadme.js
 
