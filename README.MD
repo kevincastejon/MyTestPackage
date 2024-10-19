@@ -5,7 +5,6 @@
 A package for automatic doc generation testing purpose.
 
 **Dependencies**:
-
 - com.unity.nuget.newtonsoft-json : 3.0.1
   - com.unity.multiplayer.tools : 1.1.0
   - com.unity.netcode.gameobjects : 1.5.2
