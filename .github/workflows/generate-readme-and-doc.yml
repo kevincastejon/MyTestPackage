@@ -18,8 +18,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Générer le README.md en utilisant les informations du package.json
-      - name: Generate README.md
+      # Générer le README.MD en utilisant les informations du package.json
+      - name: Generate README.MD
         run: |
           # Extraire les informations nécessaires du package.json
           NAME=$(grep '"name"' package.json | head -1 | cut -d '"' -f 4)
@@ -27,26 +27,26 @@ jobs:
           VERSION=$(grep '"version"' package.json | head -1 | cut -d '"' -f 4)
           DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
 
-          # Créer le contenu du README.md
-          echo "# $DISPLAYNAME" > README.md
-          echo "" >> README.md
-          echo "# $NAME" > README.md
-          echo "" >> README.md
-          echo "$DESCRIPTION" >> README.md
-          echo "" >> README.md
-          echo "## Version" >> README.md
-          echo "" >> README.md
-          echo "Current version: $VERSION" >> README.md
-          echo "" >> README.md
+          # Créer le contenu du README.MD
+          echo "# $DISPLAYNAME" > README.MD
+          echo "" >> README.MD
+          echo "# $NAME" > README.MD
+          echo "" >> README.MD
+          echo "$DESCRIPTION" >> README.MD
+          echo "" >> README.MD
+          echo "## Version" >> README.MD
+          echo "" >> README.MD
+          echo "Current version: $VERSION" >> README.MD
+          echo "" >> README.MD
 
-      # Vérifier si le fichier README.md a changé
+      # Vérifier si le fichier README.MD a changé
       - name: Check for README changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add README.md
-            git commit -m "Update README.md"
+            git add README.MD
+            git commit -m "Update README.MD"
             git push
           else
             echo "No changes to commit"
