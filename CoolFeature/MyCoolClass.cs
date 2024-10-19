@@ -8,6 +8,6 @@ public class MyCoolClass
     /// </summary>
     public void MyCoolMethod()
     {
-
+         
     }
 }
