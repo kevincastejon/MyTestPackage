@@ -41,9 +41,9 @@ jobs:
           echo "" >> README.MD
           echo "## Author" >> README.MD
           echo "" >> README.MD
-          echo "*$AUTHOR_NAME*" >> README.MD
-          echo "*[$AUTHOR_EMAIL](mailto:$AUTHOR_EMAIL)*" >> README.MD
-          echo "*[$AUTHOR_URL]($AUTHOR_URL)*" >> README.MD
+          echo "**Name:** $AUTHOR_NAME" >> README.MD
+          echo "**Email:** [$AUTHOR_EMAIL](mailto:$AUTHOR_EMAIL)" >> README.MD
+          echo "**Website:** [$AUTHOR_URL]($AUTHOR_URL)" >> README.MD
           echo "" >> README.MD
 
       # Vérifier si le fichier README.MD a changé
