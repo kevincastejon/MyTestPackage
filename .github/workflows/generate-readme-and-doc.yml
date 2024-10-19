@@ -27,10 +27,23 @@ jobs:
           VERSION=$(grep '"version"' package.json | head -1 | cut -d '"' -f 4)
           DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
 
+          # Débogage : afficher les informations extraites
+          echo "Name: $NAME"
+          echo "Display Name: $DISPLAYNAME"
+          echo "Version: $VERSION"
+          echo "Description: $DESCRIPTION"
+
           # Extraire les informations de l'auteur
-          AUTHOR_NAME=$(grep '"name"' package.json | grep 'author' | cut -d '"' -f 4)
-          AUTHOR_EMAIL=$(grep '"email"' package.json | grep 'author' | cut -d '"' -f 4)
-          AUTHOR_URL=$(grep '"url"' package.json | grep 'author' | cut -d '"' -f 4)
+          AUTHOR_NAME=$(grep -A 2 '"author"' package.json | grep '"name"' | cut -d '"' -f 4)
+          AUTHOR_EMAIL=$(grep -A 2 '"author"' package.json | grep '"email"' | cut -d '"' -f 4)
+
+          # Extraire l'URL de l'auteur sans utilitaires externes
+          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | sed 's/.*"url": "\(.*\)".*/\1/')
+
+          # Débogage : afficher les informations de l'auteur extraites
+          echo "Author Name: $AUTHOR_NAME"
+          echo "Author Email: $AUTHOR_EMAIL"
+          echo "Author URL: $AUTHOR_URL"
 
           # Vérifier si les informations de l'auteur sont vides
           if [ -z "$AUTHOR_NAME" ] || [ -z "$AUTHOR_EMAIL" ] || [ -z "$AUTHOR_URL" ]; then
