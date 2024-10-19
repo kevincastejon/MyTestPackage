@@ -18,21 +18,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Installer Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'  # Choisissez la version de Node.js souhaitée
+      # Installer jq pour le traitement JSON
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
-      # Créer le script pour générer le README.MD
+      # Générer le README.MD en utilisant les informations du package.json
       - name: Generate README.md
         run: |
-          echo "const fs = require('fs');" > generateReadme.js
-          echo "const packageJson = require('./package.json');" >> generateReadme.js
-          echo "const { name, displayName, version, description, author } = packageJson;" >> generateReadme.js
-          echo "const readmeContent = `## ${displayName}\n\n# ${name} : ${version}\n\n${description}\n\n## Author\n\n**Name:** ${author.name}\n**Email:** [${author.email}](mailto:${author.email})\n**Website:** [${author.url}](${author.url})\n`;" >> generateReadme.js
-          echo "fs.writeFileSync('README.md', readmeContent);" >> generateReadme.js
-          node generateReadme.js
+          NAME=$(jq -r '.name' package.json)
+          DISPLAYNAME=$(jq -r '.displayName' package.json)
+          VERSION=$(jq -r '.version' package.json)
+          DESCRIPTION=$(jq -r '.description' package.json)
+          AUTHOR_NAME=$(jq -r '.author.name' package.json)
+          AUTHOR_EMAIL=$(jq -r '.author.email' package.json)
+          AUTHOR_URL=$(jq -r '.author.url' package.json)
+
+          # Créer le contenu du README.MD
+          {
+            echo "## $DISPLAYNAME"
+            echo ""
+            echo "# $NAME : $VERSION"
+            echo ""
+            echo "$DESCRIPTION"
+            echo ""
+            echo "## Author"
+            echo ""
+            echo "**Name:** $AUTHOR_NAME"
+            echo "**Email:** [$AUTHOR_EMAIL](mailto:$AUTHOR_EMAIL)"
+            echo "**Website:** [$AUTHOR_URL]($AUTHOR_URL)"
+          } > README.md
 
       # Vérifier si le fichier README.MD a changé
       - name: Check for README changes
