@@ -32,7 +32,7 @@ jobs:
           echo "const { name, displayName, version, description, author, dependencies } = packageJson;" >> generateReadme.js
           echo "let dependenciesContent = '**Dependencies**:\n\n';" >> generateReadme.js
           echo "for (const [key, value] of Object.entries(dependencies)) {" >> generateReadme.js
-          echo "  dependenciesContent += \`- \${key} : \${value}  \`;" >> generateReadme.js
+          echo "  dependenciesContent += \`- \${key} : \${value}\n  \`;" >> generateReadme.js
           echo "}" >> generateReadme.js
           echo "const readmeContent = \`# \${name}\n\n## \${displayName} : \${version}\n\n\${description}\n\n\${dependenciesContent}\n\n\${author.name}\n\n\${author.email}\n\n\${author.url}\`;" >> generateReadme.js
           echo "fs.writeFileSync('README.MD', readmeContent);" >> generateReadme.js
