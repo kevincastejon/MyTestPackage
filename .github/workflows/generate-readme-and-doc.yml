@@ -1,0 +1,90 @@
+name: Generate README and Deploy Doxygen Documentation
+
+on:
+  push:
+    branches:
+      - main  # Déclenche l'action lorsqu'un push est effectué sur la branche "main"
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
+
+permissions:
+  contents: write  # Accorder les permissions d'écriture sur les contenus du dépôt
+
+jobs:
+  generate-readme-and-doc:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Vérifier le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Générer le README.md en utilisant les informations du package.json
+      - name: Generate README.md
+        run: |
+          # Extraire les informations nécessaires du package.json
+          NAME=$(grep '"name"' package.json | head -1 | cut -d '"' -f 4)
+          DISPLAYNAME=$(grep '"displayName"' package.json | head -1 | cut -d '"' -f 4)
+          VERSION=$(grep '"version"' package.json | head -1 | cut -d '"' -f 4)
+          DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
+
+          # Créer le contenu du README.md
+          echo "# $DISPLAYNAME" > README.md
+          echo "" >> README.md
+          echo "# $NAME" > README.md
+          echo "" >> README.md
+          echo "$DESCRIPTION" >> README.md
+          echo "" >> README.md
+          echo "## Version" >> README.md
+          echo "" >> README.md
+          echo "Current version: $VERSION" >> README.md
+          echo "" >> README.md
+
+      # Vérifier si le fichier README.md a changé
+      - name: Check for README changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "Update README.md"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
+      # Installer Doxygen
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install -y doxygen
+
+      # Générer la documentation avec Doxygen
+      - name: Generate Doxygen documentation
+        run: doxygen DoxygenConfig
+
+      # Configurer Git pour le déploiement
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Déployer la documentation sur la branche gh-pages
+      - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utiliser le GITHUB_TOKEN pour l'authentification
+
+        run: |
+          # Créer un répertoire temporaire pour le déploiement
+          mkdir -p ../gh-pages
+          cp -r ./Documentation/* ../gh-pages/
+
+          # Passer dans le répertoire gh-pages
+          cd ../gh-pages
+
+          # Initialiser un dépôt Git et ajouter les fichiers
+          git init
+          git add .
+          git commit -m "Deploy Doxygen documentation"
+
+          # Forcer le push vers la branche gh-pages
+          git branch -M gh-pages
+          git remote add origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+          git push -f origin gh-pages
