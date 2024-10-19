@@ -27,16 +27,23 @@ jobs:
           VERSION=$(grep '"version"' package.json | head -1 | cut -d '"' -f 4)
           DESCRIPTION=$(grep '"description"' package.json | head -1 | cut -d '"' -f 4)
 
+          # Extraire les informations de l'auteur
+          AUTHOR_NAME=$(grep '"name"' package.json | grep 'author' | head -1 | cut -d '"' -f 4)
+          AUTHOR_EMAIL=$(grep '"email"' package.json | grep 'author' | head -1 | cut -d '"' -f 4)
+          AUTHOR_URL=$(grep '"url"' package.json | grep 'author' | head -1 | cut -d '"' -f 4)
+
           # Créer le contenu du README.MD
-          echo "# $DISPLAYNAME" > README.MD
+          echo "## $DISPLAYNAME" > README.MD
           echo "" >> README.MD
-          echo "# $NAME" > README.MD
+          echo "# $NAME : $VERSION" >> README.MD
           echo "" >> README.MD
           echo "$DESCRIPTION" >> README.MD
           echo "" >> README.MD
-          echo "## Version" >> README.MD
+          echo "## Author" >> README.MD
           echo "" >> README.MD
-          echo "Current version: $VERSION" >> README.MD
+          echo "*$AUTHOR_NAME*" >> README.MD
+          echo "*[$AUTHOR_EMAIL](mailto:$AUTHOR_EMAIL)*" >> README.MD
+          echo "*[$AUTHOR_URL]($AUTHOR_URL)*" >> README.MD
           echo "" >> README.MD
 
       # Vérifier si le fichier README.MD a changé
