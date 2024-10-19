@@ -37,8 +37,8 @@ jobs:
           AUTHOR_NAME=$(grep -A 2 '"author"' package.json | grep '"name"' | cut -d '"' -f 4)
           AUTHOR_EMAIL=$(grep -A 2 '"author"' package.json | grep '"email"' | cut -d '"' -f 4)
 
-          # Extraire l'URL de l'auteur sans utilitaires externes
-          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | sed 's/.*"url": "\(.*\)".*/\1/')
+          # Extraire l'URL de l'auteur
+          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | sed 's/.*"url": "\(.*\)".*/\1/' | tr -d '[:space:]')
 
           # Débogage : afficher les informations de l'auteur extraites
           echo "Author Name: $AUTHOR_NAME"
@@ -70,4 +70,47 @@ jobs:
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config --global user.name "github-actions[bot]"
-            git config --global use
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add README.MD
+            git commit -m "Update README.MD"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
+      # Installer Doxygen
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install -y doxygen
+
+      # Générer la documentation avec Doxygen
+      - name: Generate Doxygen documentation
+        run: doxygen DoxygenConfig
+
+      # Configurer Git pour le déploiement
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Déployer la documentation sur la branche gh-pages
+      - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utiliser le GITHUB_TOKEN pour l'authentification
+
+        run: |
+          # Créer un répertoire temporaire pour le déploiement
+          mkdir -p ../gh-pages
+          cp -r ./Documentation/* ../gh-pages/
+
+          # Passer dans le répertoire gh-pages
+          cd ../gh-pages
+
+          # Initialiser un dépôt Git et ajouter les fichiers
+          git init
+          git add .
+          git commit -m "Deploy Doxygen documentation"
+
+          # Forcer le push vers la branche gh-pages
+          git branch -M gh-pages
+          git remote add origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+          git push -f origin gh-pages
