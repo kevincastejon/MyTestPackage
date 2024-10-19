@@ -6,7 +6,6 @@ A package for automatic doc generation testing purpose.
 
 ## Author
 
-**Name:** 
-**Email:** [](mailto:)
-**Website:** []()
-
+**Name:** Kevin Castejon
+**Email:** [castejonkevin@gmail.com](mailto:castejonkevin@gmail.com)
+**Website:** [http://www.kevincastejon.fr/](http://www.kevincastejon.fr/)
