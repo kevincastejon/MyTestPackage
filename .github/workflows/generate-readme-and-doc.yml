@@ -34,11 +34,9 @@ jobs:
           echo "Description: $DESCRIPTION"
 
           # Extraire les informations de l'auteur
-          AUTHOR_NAME=$(grep -A 2 '"author"' package.json | grep '"name"' | cut -d '"' -f 4)
-          AUTHOR_EMAIL=$(grep -A 2 '"author"' package.json | grep '"email"' | cut -d '"' -f 4)
-
-          # Extraire l'URL de l'auteur
-          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | sed 's/.*"url": "\(.*\)".*/\1/' | tr -d '[:space:]')
+          AUTHOR_NAME=$(grep -A 2 '"author"' package.json | grep '"name"' | head -n 1 | cut -d '"' -f 4)
+          AUTHOR_EMAIL=$(grep -A 2 '"author"' package.json | grep '"email"' | head -n 1 | cut -d '"' -f 4)
+          AUTHOR_URL=$(grep -A 2 '"author"' package.json | grep '"url"' | head -n 1 | cut -d '"' -f 4)
 
           # Débogage : afficher les informations de l'auteur extraites
           echo "Author Name: $AUTHOR_NAME"
@@ -98,19 +96,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utiliser le GITHUB_TOKEN pour l'authentification
 
         run: |
-          # Créer un répertoire temporaire pour le déploiement
-          mkdir -p ../gh-pages
-          cp -r ./Documentation/* ../gh-pages/
-
-          # Passer dans le répertoire gh-pages
-          cd ../gh-pages
-
-          # Initialiser un dépôt Git et ajouter les fichiers
-          git init
-          git add .
-          git commit -m "Deploy Doxygen documentation"
-
-          # Forcer le push vers la branche gh-pages
-          git branch -M gh-pages
-          git remote add origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
-          git push -f origin gh-pages
+          # Créer un répertoire
